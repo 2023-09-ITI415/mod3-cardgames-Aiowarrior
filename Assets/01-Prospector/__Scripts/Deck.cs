@@ -274,6 +274,30 @@ public class Deck : MonoBehaviour {
 			cards.Add (card);
 		} // for all the Cardnames	
 	} // makeCards
+
+	 // Shuffle the Cards in Deck.cards
+    static public void Shuffle(ref List<Card> oCards)
+    { // a
+        // Create a temporary List to hold the new shuffle order
+        List<Card> tCards = new List<Card>();
+        int ndx; // This will hold the index of the card to be moved
+        tCards = new List<Card>(); // Initialize the temporary List
+        // Repeat as long as there are cards in the original List
+        while (oCards.Count > 0)
+        {
+            // Pick the index of a random card
+            ndx = Random.Range(0, oCards.Count);
+            // Add that card to the temporary List
+            tCards.Add(oCards[ndx]);
+            // And remove that card from the original List
+            oCards.RemoveAt(ndx);
+        }
+        // Replace the original List with the temporary List
+        oCards = tCards;
+        // Because oCards is a reference (ref) parameter, the original argument
+        // that was passed in is changed as well.
+    }
+
 	
 	//Find the proper face card
 	public Sprite GetFace(string faceS) {
@@ -291,27 +315,4 @@ public class Deck : MonoBehaviour {
      /// </summary>
      /// <param name="oCards">reference to a List of Card object. Passed by reference, the original order of
      /// the list will be changed upon exiting the function</param>
-	 static public void Shuffle(ref List<Card> oCards)
-	 {
-	 	List<Card> tCards = new List<Card>();
-
-	 	int ndx;   // which card to move
-
-	 	while (oCards.Count > 0) 
-	 	{
-	 		// find a random card, add it to shuffled list and remove from original deck
-	 		ndx = Random.Range(0,oCards.Count);
-	 		tCards.Add(oCards[ndx]);
-	 		oCards.RemoveAt(ndx);
-	 	}
-
-	 	oCards = tCards;
-
-	 	//because oCards is a ref parameter, the changes made are propogated back
-	 	//for ref paramters changes made in the function persist.
-
-
-	 }
-
-
 } // Deck class
