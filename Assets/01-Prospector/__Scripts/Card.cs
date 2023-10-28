@@ -61,15 +61,17 @@ break;
 }
 }
 
-	public bool faceUp {
-		get {
-			return (!back.activeSelf);
-		}
+	public bool faceUp
+    {
+        get { return (!back.activeSelf); }
+        set { back.SetActive(!value); }
+    }
 
-		set {
-			back.SetActive(!value);
-		}
-	}
+    // Virtual methods can be overridden by subclass methods with the same name
+    virtual public void OnMouseUpAsButton()
+    {
+        print(name);
+    }
 	
 	// Update is called once per frame
 	void Update () {
