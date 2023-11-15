@@ -13,11 +13,7 @@ public class Pyramid : MonoBehaviour
     public float xOffset = 3;
     public float yOffset = -2.5f;
     public Vector3 layoutCenter;
-    //public Vector2 fsPosMid = new Vector2(0.5f, 0.90f);
-    //public Vector2 fsPosRun = new Vector2(0.5f, 0.75f);
-    //public Vector2 fsPosMid2 = new Vector2(0.4f, 1.0f);
-    //public Vector2 fsPosEnd = new Vector2(0.5f, 0.95f);
-    //public float reloadDelay = 2f;
+   
 
     [Header("Set Dynamically")]
     public Deck deck;
@@ -27,7 +23,6 @@ public class Pyramid : MonoBehaviour
     public CardPyramid piletop;
     public List<CardPyramid> tableau;
     public List<CardPyramid> discardPile;
-    //public FloatingScore fsRun;
 
     CardPyramid firstCard;
     CardPyramid secondCard;
@@ -35,15 +30,15 @@ public class Pyramid : MonoBehaviour
 
     void Awake()
     {
-        S = this; //"set up singleton for Pyramid"
+        S = this; 
     }
         void Start()
     {
         deck = GetComponent<Deck>();
         deck.InitDeck(deckXML.text);
         Deck.Shuffle(ref deck.cards);
-        layout = GetComponent<Layout>(); //get Layout component
-        layout.ReadLayout(layoutXML.text); //Pass LayoutXML
+        layout = GetComponent<Layout>(); 
+        layout.ReadLayout(layoutXML.text); 
         drawPile = ConvertListCardsToListCardPyramid(deck.cards);
         LayoutGame();
     }
@@ -86,42 +81,42 @@ public class Pyramid : MonoBehaviour
 
     void LayoutGame()
     {
-        if (layoutAnchor == null)           //Creates an empty GameObject to serve as an anchor for the tableau
+        if (layoutAnchor == null)           
         {
-            GameObject tGO = new GameObject("_LayoutAnchor");       //Create empty GameObject named _LayoutAnchor in Hierarchy
-            layoutAnchor = tGO.transform;           //Get its Transform
-            layoutAnchor.transform.position = layoutCenter;     //Position it
+            GameObject tGO = new GameObject("_LayoutAnchor");
+            layoutAnchor = tGO.transform;          
+            layoutAnchor.transform.position = layoutCenter;     
         }
-        CardPyramid cp; //follow the layout
+        CardPyramid cp; 
 
-        foreach (SlotDef tSD in layout.slotDefs) //iterate through all SlotDefs in the layout.slotDefs as tSD
+        foreach (SlotDef tSD in layout.slotDefs) 
         {
-            cp = Draw();    //Pull a card from top of drawpile
-            cp.faceUp = tSD.faceUp; //Set its faceUp to the value in SlotDef
-            cp.transform.parent = layoutAnchor;     //Make its parent layoutAnchor (replaces previous parent: deck.deckAnchor, or _Deck in hierarchy when playing
+            cp = Draw();    
+            cp.faceUp = tSD.faceUp; 
+            cp.transform.parent = layoutAnchor;     
             cp.transform.localPosition = new Vector3(
                 layout.multiplier.x * tSD.x,
                 layout.multiplier.y * tSD.y,
                 -tSD.layerID);
-            //Sets localPosition of card based on slotDef
+           
             cp.layoutID = tSD.id;
             cp.slotDef = tSD;
             cp.state = eNewCardState.tableau;
-            //Cardpyramids in the tableau have the state CardState.tableau
-            cp.SetSortingLayerName(tSD.layerName); //Set the sorting layers
+            
+            cp.SetSortingLayerName(tSD.layerName); 
 
-            tableau.Add(cp);    //Add this Cardpyramid to the List<> tableau
+            tableau.Add(cp);    
         }
 
         foreach (CardPyramid tCP in tableau)
         {
-            foreach (int hid in tCP.slotDef.hiddenBy)   //for each card in the list of hiddenby
+            foreach (int hid in tCP.slotDef.hiddenBy)   
             {
-                cp = FindCardByLayoutID(hid);       //cp is the id of the card hiding the other card
-                tCP.hiddenBy.Add(cp);           //add the card's id to the hiddenby list for tcp
+                cp = FindCardByLayoutID(hid);      
+                tCP.hiddenBy.Add(cp);          
             }
         }
-        MoveToPiletop(Draw()); //Set up the initial target card
+        MoveToPiletop(Draw()); 
         UpdateDrawPile();
     }
 
@@ -129,28 +124,27 @@ public class Pyramid : MonoBehaviour
     {
         foreach (CardPyramid tCP in tableau)
         {
-            //search through all cards in tableau list
+           
             if (tCP.layoutID == layoutID)
             {
-                //if the card has the same ID, return it
                 return (tCP);
             }
         }
         return (null);
     }
 
-    void MoveToDiscard(CardPyramid cd)   //Moves the current target to the discardPile
+    void MoveToDiscard(CardPyramid cd)   
     {
-        cd.state = eNewCardState.discard;  //Set the state of the card to discard
-        discardPile.Add(cd);            //Add it to the discardPile List<>
-        cd.transform.parent = layoutAnchor;     //Update its transform parent
+        cd.state = eNewCardState.discard;  
+        discardPile.Add(cd);           
+        cd.transform.parent = layoutAnchor;     
 
-        //Position this card on the discardPile
+        
         cd.transform.localPosition = new Vector3(
             layout.multiplier.x * layout.discardPile.x,
             layout.multiplier.y * layout.discardPile.y,
             -layout.discardPile.layerID + 0.5f);
-        cd.faceUp = true; //place it on top of the pile for depth sorting
+        cd.faceUp = true; 
         cd.SetSortingLayerName(layout.discardPile.layerName);
         cd.SetSortOrder(-100 + discardPile.Count);
     }
@@ -165,17 +159,15 @@ public class Pyramid : MonoBehaviour
             layout.multiplier.x * layout.discardPile.x,
             layout.multiplier.y * layout.discardPile.y,
             -layout.discardPile.layerID);
-        cd.faceUp = true; //Make it face-up
-                          //Set the depth sorting
+        cd.faceUp = true; 
         cd.SetSortingLayerName(layout.discardPile.layerName);
         cd.SetSortOrder(0);
     }
 
-    //Arranges all the cards of the drawPile to show how many are left
+    
     void UpdateDrawPile()
     {
         CardPyramid cd;
-        //Go through all the cards of the drawPile
         for (int i = 0; i < drawPile.Count; i++)
         {
             cd = drawPile[i];
@@ -185,20 +177,15 @@ public class Pyramid : MonoBehaviour
                 layout.multiplier.y * layout.drawPile.y,
                 -layout.drawPile.layerID + 0.1f);
             cd.faceUp = false;
-            //Set depth sorting
             cd.SetSortingLayerName(layout.drawPile.layerName);
             cd.SetSortOrder(-10 * i);
         }
     }
 
-    //What's the easiest way to check if a card is a king, and then move it to the discard pile in each state where the card is clickable?
-    //Okay, what cards are clickable and what aren't? Clickable: drawpile, piletop, row 0 and row 1
-
     public int card_cleared_count;
 
     public void CardClicked(CardPyramid cd)
     {
-        //Trying to get card to change color when clicked
 
         switch (cd.state)
         {
@@ -222,7 +209,7 @@ public class Pyramid : MonoBehaviour
                     {
                         MoveToDiscard(firstCard);
                         card_cleared_count += 1;
-                        firstCard.layoutID = 0; //change the card's sorting order... but I know it's not layoutID.
+                        firstCard.layoutID = 0;
                         firstCard = null;
                         MoveToDiscard(secondCard);
                         card_cleared_count += 1;
@@ -240,13 +227,10 @@ public class Pyramid : MonoBehaviour
                     print("This card has been selected as card one.");
                 }
                 
-                //code it to allow being selected and to glow
-                //cd.
 
                 break;
 
             case eNewCardState.drawpile:
-                //Clicking any card in the drawPile will draw the next card
                 MoveToDiscard(piletop);
                 MoveToPiletop(Draw());
                 UpdateDrawPile();
@@ -262,7 +246,7 @@ public class Pyramid : MonoBehaviour
                         noGo = false;
                     }
                 }
-                if (noGo == false)  //if the card is covered, then noGo is false and the case returns before the statements, etc., below it can run.
+                if (noGo == false)  
                 {
                     return;
                 }
@@ -291,11 +275,11 @@ public class Pyramid : MonoBehaviour
                     {
                         MoveToDiscard(firstCard);
                         card_cleared_count += 1;
-                        firstCard.SetSortOrder(-10 * firstCard.rank); //maybe? nah
+                        firstCard.SetSortOrder(-10 * firstCard.rank); 
                         firstCard = null;
                         MoveToDiscard(secondCard);
                         card_cleared_count += 1;
-                        secondCard.SetSortOrder(-10 * secondCard.rank); //maybe? nah
+                        secondCard.SetSortOrder(-10 * secondCard.rank);
                         secondCard = null;
                         if (piletop == null){
                             MoveToPiletop(Draw());
@@ -311,18 +295,6 @@ public class Pyramid : MonoBehaviour
                     firstCard = cd;
                     print("This card has been selected as card one.");
                 }
-               
-                //if (EqualsThirteen(piletop, cd))
-                //{
-                //    MoveToDiscard(piletop);
-                //    MoveToDiscard(cd);
-                //    MoveToPiletop(Draw());
-                //    UpdateDrawPile();
-                //}
-
-                //tableau.Remove(cd); //Remove it from the tableau List
-                //MoveToPiletop(cd); //Make it the target card
-                //SetTableauCanClick();
                 break;
         }
     }
