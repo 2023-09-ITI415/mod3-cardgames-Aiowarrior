@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LoadNewScene : MonoBehaviour
+public class ChangeScene : MonoBehaviour
 {
-
-    public void LoadMod1Scene(string sceneToLoad)
+    public void LoadScene(string __Prospector_Scene_0)
     {
-        SceneManager.LoadScene(sceneToLoad);
+        SceneManager.LoadScene(__Prospector_Scene_0);
     }
-
 }

@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,7 +31,7 @@ public class Layout : MonoBehaviour
     public SlotDef discardPile;
 
     // This holds all of the possible names for the layers set by layerID
-    public string[] sortingLayerNames = new string[]
+    public string[] prospectorsortingLayerNames = new string[]
     {
         "Row0",
         "Row1",
@@ -39,6 +40,8 @@ public class Layout : MonoBehaviour
         "Discard",
         "Draw"
     };
+    public string[] sortingLayerNames = new string[] 
+    { "Row0", "Row1", "Row2", "Row3", "Row4", "Row5", "Row6", "Row7", "Discard", "Draw" };
 
     // This function is called to read in the LayoutXML.xml file
     public void ReadLayout(string xmlText)
@@ -71,7 +74,14 @@ public class Layout : MonoBehaviour
             tSD.y = float.Parse(slotsX[i].att("y"));
             tSD.layerID = int.Parse(slotsX[i].att("layer"));
             // This converts the number of the layerID into a text layerName
-            tSD.layerName = sortingLayerNames[tSD.layerID]; // a
+            if (SceneManager.GetActiveScene().name == "__Prospector_Scene_0")
+            {
+                //Converts number of the layerID into a text layerName
+                tSD.layerName = prospectorsortingLayerNames[tSD.layerID];
+            }
+            if (SceneManager.GetActiveScene().name == "GameScene") {
+                tSD.layerName = sortingLayerNames[tSD.layerID];
+            }
             switch (tSD.type)
             {
                 // pull additional attributes based on the type of this <slot>
@@ -89,7 +99,9 @@ public class Layout : MonoBehaviour
                     slotDefs.Add(tSD);
                     break;
                 case "drawpile":
-                    tSD.stagger.x = float.Parse(slotsX[i].att("xstagger"));
+                     if (SceneManager.GetActiveScene().name == "__Prospector_Scene_0"){
+                        tSD.stagger.x = float.Parse(slotsX[i].att("xstagger"));
+                    }
                     drawPile = tSD;
                     break;
                 case "discardpile":
