@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public enum eNewCardState //eNum defines a type of variable that only has a few possible named values- drawpile, tableau, piletop, and discard.
+public enum eNewCardState 
 {
     drawpile,
     tableau,
