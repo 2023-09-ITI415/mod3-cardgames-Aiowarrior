@@ -1,5 +1,4 @@
 <xml>
-	<!-- Changed LayoutXML to create Pyramid Solitaire's layout -->
 	
 	<!-- The multiplier is multiplied by the x and y attributes below. -->
 	<!-- This determines how loose or tight the layout is. --> 

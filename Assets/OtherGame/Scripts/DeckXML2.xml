@@ -35,7 +35,7 @@
 	<card rank="10">
 		<pip x="0" y="0" z="0" flip="0" scale="2"/>
 	</card>
-	<!-- Face cards have no pips, so this references the name of the Sprite to be shown. -->
+<!-- Face cards have no pips, so this references the name of the Sprite to be shown. -->
 	<card rank="11" face="FaceCard_11"/>
 	<card rank="12" face="FaceCard_12"/>
 	<card rank="13" face="FaceCard_13"/>
